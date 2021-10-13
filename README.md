@@ -50,3 +50,4 @@ Windows 11로 업데이트 되면서 시작 메뉴가 작아지고 작업 표시
   따라서 실행할 떄 2개 파일이 같은 폴더에 있어야 합니다.
   - MyShortcutInterop.dll: Win32 API를 사용해 COM 객체에 접근하는 DLL
   - MyShortcuts.exe: UI를 담당하는 WPF 응용 프로그램
+- 64비트 Windows만 지원합니다.
