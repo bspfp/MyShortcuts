@@ -32,6 +32,7 @@ namespace MyShortcuts {
         VK_LEFT = 0x25,
         VK_UP = 0x26,
         VK_RIGHT = 0x27,
+        VK_INSERT = 0x2D,
         VK_F1 = 0x70,
     }
 
@@ -41,6 +42,7 @@ namespace MyShortcuts {
         Up,
         Forward,
         About,
+        SetHome,
     }
 
     [StructLayout(LayoutKind.Sequential)]

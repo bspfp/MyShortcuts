@@ -4,8 +4,8 @@ using System.Windows.Interop;
 
 namespace MyShortcuts {
     internal class MyShortcutsInterop {
-        internal delegate void NavigationCompleteCallback(string parsingName, string editName, string normalName, bool isFileSystemFolder);
-        internal delegate void NavigationFailedCallback(string parsingName, string editName, string normalName, bool isFileSystemFolder);
+        internal delegate void NavigationCompleteCallback([Out, MarshalAs(UnmanagedType.LPWStr)] string parsingName,  [Out, MarshalAs(UnmanagedType.LPWStr)]string editName,  [Out, MarshalAs(UnmanagedType.LPWStr)]string normalName, bool isFileSystemFolder);
+        internal delegate void NavigationFailedCallback( [Out, MarshalAs(UnmanagedType.LPWStr)]string parsingName,  [Out, MarshalAs(UnmanagedType.LPWStr)]string editName,  [Out, MarshalAs(UnmanagedType.LPWStr)]string normalName, bool isFileSystemFolder);
 
         internal enum NavigateTarget : int {
             Backward,

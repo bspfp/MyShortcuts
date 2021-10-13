@@ -8,6 +8,7 @@ namespace MyShortcuts {
 
         private ExplorerBrowser explorerBrowser;
         private About aboutDlg = null;
+        private ToastWindow toast = null;
 
         public MainWindow() {
             InitializeComponent();
@@ -90,6 +91,10 @@ namespace MyShortcuts {
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             App.Inst.Config.Maximized = WindowState == WindowState.Maximized;
+            aboutDlg?.Close();
+            aboutDlg = null;
+            toast?.Close();
+            toast = null;
         }
 
         private void Window_Activated(object sender, EventArgs e) {
@@ -171,10 +176,27 @@ namespace MyShortcuts {
                     AboutButton_Click(null, null);
                     break;
 
+                case (ushort)CustomCommands.SetHome:
+                    OnSetHome();
+                    break;
+
                 default:
                     break;
             }
             return false;
+        }
+
+        private void OnSetHome() {
+            if (explorerBrowser != null && !string.IsNullOrWhiteSpace(explorerBrowser.ParsingName)) {
+                App.Inst.Config.Folder = explorerBrowser.ParsingName;
+                ShowToast(string.Format("{0}을 홈으로 지정하였습니다.", explorerBrowser.EditName));
+            }
+        }
+
+        private void ShowToast(string msg) {
+            toast?.Close();
+            toast = new ToastWindow(msg) { Left = Left, Top = Top, Owner = this };
+            toast.Show();
         }
 
         private void ExplorerBrowserHolder_SizeChanged(object sender, SizeChangedEventArgs e) {

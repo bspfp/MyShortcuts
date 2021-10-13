@@ -21,31 +21,31 @@
 
         <Border x:Name="explorerBrowserHolder" Grid.ColumnSpan="5" SizeChanged="ExplorerBrowserHolder_SizeChanged"/>
 
-        <Button x:Name="backButton" HorizontalAlignment="Right" Grid.Row="1" Background="{x:Null}" BorderBrush="{x:Null}" Click="BackButton_Click">
+        <Button x:Name="backButton" HorizontalAlignment="Right" Grid.Row="1" Background="{x:Null}" BorderBrush="{x:Null}" Click="BackButton_Click" Focusable="False">
             <ContentControl Margin="8">
                 <Image Source="icons/return.ico"/>
             </ContentControl>
         </Button>
 
-        <Button x:Name="upButton" Grid.Row="1" Grid.Column="1" Background="{x:Null}" BorderBrush="{x:Null}" Click="UpButton_Click">
+        <Button x:Name="upButton" Grid.Row="1" Grid.Column="1" Background="{x:Null}" BorderBrush="{x:Null}" Click="UpButton_Click" Focusable="False">
             <ContentControl Margin="8">
                 <Image Source="icons/up.ico"/>
             </ContentControl>
         </Button>
 
-        <Button x:Name="foreButton" Grid.Row="1" Grid.Column="2" Background="{x:Null}" BorderBrush="{x:Null}" Click="ForeButton_Click">
+        <Button x:Name="foreButton" Grid.Row="1" Grid.Column="2" Background="{x:Null}" BorderBrush="{x:Null}" Click="ForeButton_Click" Focusable="False">
             <ContentControl Margin="8">
                 <Image Source="icons/next.ico"/>
             </ContentControl>
         </Button>
 
-        <Button x:Name="homeButton" Grid.Row="1" Grid.Column="3" Background="{x:Null}" BorderBrush="{x:Null}" Click="HomeButton_Click">
+        <Button x:Name="homeButton" Grid.Row="1" Grid.Column="3" Background="{x:Null}" BorderBrush="{x:Null}" Click="HomeButton_Click" Focusable="False">
             <ContentControl Margin="8">
                 <Image Source="icons/home.ico"/>
             </ContentControl>
         </Button>
 
-        <Button x:Name="aboutButton" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="4" Background="{x:Null}" BorderBrush="{x:Null}" Click="AboutButton_Click">
+        <Button x:Name="aboutButton" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="4" Background="{x:Null}" BorderBrush="{x:Null}" Click="AboutButton_Click" Focusable="False">
             <ContentControl Margin="8">
                 <Image Source="icons/unknown.ico"/>
             </ContentControl>
