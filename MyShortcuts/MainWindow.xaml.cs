@@ -103,18 +103,20 @@ namespace MyShortcuts {
         }
 
         private void Window_Deactivated(object sender, EventArgs e) {
-            switch (App.Inst.Config.DeactiveBehavior) {
-                case DeactiveBehavior.Minimize:
-                    WindowState = WindowState.Minimized;
-                    break;
+            if (aboutDlg == null) {
+                switch (App.Inst.Config.DeactiveBehavior) {
+                    case DeactiveBehavior.Minimize:
+                        WindowState = WindowState.Minimized;
+                        break;
 
-                case DeactiveBehavior.MoveToBack:
-                    BringToBottom();
-                    break;
+                    case DeactiveBehavior.MoveToBack:
+                        BringToBottom();
+                        break;
 
-                case DeactiveBehavior.None:
-                default:
-                    break;
+                    case DeactiveBehavior.None:
+                    default:
+                        break;
+                }
             }
         }
 
