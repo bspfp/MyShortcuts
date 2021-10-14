@@ -19,6 +19,7 @@ namespace MyShortcuts {
     public partial class About : Window {
         public About() {
             InitializeComponent();
+            title.Content = string.Format("MyShortcuts v{0}", typeof(About).Assembly.GetName().Version.ToString());
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
