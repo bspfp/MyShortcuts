@@ -9,7 +9,7 @@ namespace MyShortcuts {
         public string NormalName { get; private set; } = "";
         public bool IsFileSystemFolder { get; private set; } = false;
 
-        private FOLDERSETTINGS DefaultFolderSettings = new FOLDERSETTINGS() {
+        public FOLDERSETTINGS DefaultFolderSettings = new FOLDERSETTINGS() {
             ViewMode = FOLDERVIEWMODE.FVM_ICON,
             fFlags = FOLDERFLAGS.FWF_AUTOARRANGE | FOLDERFLAGS.FWF_SHOWSELALWAYS | FOLDERFLAGS.FWF_NOCOLUMNHEADER
         };

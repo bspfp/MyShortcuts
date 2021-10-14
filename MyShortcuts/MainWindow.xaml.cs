@@ -45,6 +45,8 @@ namespace MyShortcuts {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             explorerBrowser = new ExplorerBrowser();
+            if (App.Inst.Config.UseSingleClick)
+                explorerBrowser.DefaultFolderSettings.fFlags |= FOLDERFLAGS.FWF_SINGLECLICKACTIVATE;
             explorerBrowserHolder.Child = explorerBrowser;
 
             explorerBrowser.NavigateToFolder(App.Inst.Config.Folder);
