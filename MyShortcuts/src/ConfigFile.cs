@@ -45,6 +45,11 @@ namespace MyShortcuts {
 
         private string configFilePath = "";
 
+        private readonly DeactiveBehavior[] deactiveBehaviors = new DeactiveBehavior[] { DeactiveBehavior.Minimize, DeactiveBehavior.MoveToBack, DeactiveBehavior.None };
+        private int currentDeactiveBehavior = 0;
+        private readonly PinMethods[] pinMethods = new PinMethods[] { PinMethods.Pin, PinMethods.None, PinMethods.Unpin, PinMethods.None };
+        private int currentPinMethod = 0;
+
         public static ConfigFile Load() {
             var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var defaultFolder = Path.Combine(userProfilePath, DefaultFolderName);
@@ -67,6 +72,15 @@ namespace MyShortcuts {
             data.Get("PinMethods", ref ret.PinMethods);
             data.Get("KeepFolder", ref ret.KeepFolder);
 
+            for (ret.currentDeactiveBehavior = 0; ret.currentDeactiveBehavior < ret.deactiveBehaviors.Length; ret.currentDeactiveBehavior++) {
+                if (ret.deactiveBehaviors[ret.currentDeactiveBehavior] == ret.DeactiveBehavior)
+                    break;
+            }
+            for (ret.currentPinMethod = 0; ret.currentPinMethod < ret.pinMethods.Length; ret.currentPinMethod++) {
+                if (ret.pinMethods[ret.currentPinMethod] == ret.PinMethods)
+                    break;
+            }
+
             return ret;
         }
         public void Save() {
@@ -84,6 +98,23 @@ namespace MyShortcuts {
             data.Set("KeepFolder", KeepFolder);
 
             data.Save(configFilePath, Description);
+        }
+
+        public DeactiveBehavior NextDeactiveBehavior() {
+            currentDeactiveBehavior = (currentDeactiveBehavior + 1) % deactiveBehaviors.Length;
+            DeactiveBehavior = deactiveBehaviors[currentDeactiveBehavior];
+            return DeactiveBehavior;
+        }
+
+        public PinMethods NextPinMethod() {
+            currentPinMethod = (currentPinMethod + 1) % pinMethods.Length;
+            PinMethods = pinMethods[currentPinMethod];
+            return PinMethods;
+        }
+
+        public bool NextKeepFolder() {
+            KeepFolder = !KeepFolder;
+            return KeepFolder;
         }
     }
 }

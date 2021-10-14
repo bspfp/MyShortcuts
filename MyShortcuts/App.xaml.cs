@@ -29,12 +29,15 @@ namespace MyShortcuts {
             Config = ConfigFile.Load();
 
             var accelTable = new ACCEL[] {
-                new ACCEL(){ fVirt=AccelFVirt.FVIRTKEY|AccelFVirt.FALT,key=AccelVirtualKeys.VK_LEFT,cmd=CustomCommands.Backward },
-                new ACCEL(){ fVirt=AccelFVirt.FVIRTKEY|AccelFVirt.FALT,key=AccelVirtualKeys.VK_UP,cmd=CustomCommands.Up },
-                new ACCEL(){ fVirt=AccelFVirt.FVIRTKEY|AccelFVirt.FALT,key=AccelVirtualKeys.VK_RIGHT,cmd=CustomCommands.Forward},
-                new ACCEL(){ fVirt=AccelFVirt.FVIRTKEY|AccelFVirt.FALT,key=AccelVirtualKeys.VK_HOME,cmd=CustomCommands.Home },
-                new ACCEL(){ fVirt=AccelFVirt.FVIRTKEY|AccelFVirt.FALT,key=AccelVirtualKeys.VK_INSERT,cmd=CustomCommands.SetHome },
-                new ACCEL(){ fVirt=AccelFVirt.FVIRTKEY,key=AccelVirtualKeys.VK_F1,cmd=CustomCommands.About },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_LEFT, cmd = CustomCommands.Backward },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_UP, cmd = CustomCommands.Up },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_RIGHT, cmd = CustomCommands.Forward},
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_HOME, cmd = CustomCommands.Home },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_INSERT, cmd = CustomCommands.SetHome },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_1, cmd = CustomCommands.ChangeDeactiveBehavior },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_2, cmd = CustomCommands.ChangePinMethod },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_3, cmd = CustomCommands.ChangeKeepFolder },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY, key = AccelVirtualKeys.VK_F1, cmd = CustomCommands.About },
             };
             accelerators = Win32.CreateAcceleratorTableW(accelTable, accelTable.Length);
 

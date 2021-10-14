@@ -54,5 +54,10 @@ namespace MyShortcuts {
                 Close();
             }
         }
+
+        protected override void OnClosed(EventArgs e) {
+            base.OnClosed(e);
+            MainWindow.Inst.OnCloseToast();
+        }
     }
 }

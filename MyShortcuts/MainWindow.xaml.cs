@@ -103,7 +103,7 @@ namespace MyShortcuts {
         }
 
         private void Window_Deactivated(object sender, EventArgs e) {
-            if (aboutDlg == null) {
+            if (aboutDlg == null && toast == null) {
                 switch (App.Inst.Config.DeactiveBehavior) {
                     case DeactiveBehavior.Minimize:
                         WindowState = WindowState.Minimized;
@@ -182,10 +182,63 @@ namespace MyShortcuts {
                     OnSetHome();
                     break;
 
+                case (ushort)CustomCommands.ChangeDeactiveBehavior:
+                    OnChangeDeactiveBehavior();
+                    break;
+
+                case (ushort)CustomCommands.ChangePinMethod:
+                    OnChangePinMethod();
+                    break;
+
+                case (ushort)CustomCommands.ChangeKeepFolder:
+                    OnChangeKeepFolder();
+                    break;
+
                 default:
                     break;
             }
             return false;
+        }
+
+        private void OnChangeDeactiveBehavior() {
+            switch (App.Inst.Config.NextDeactiveBehavior()) {
+                case DeactiveBehavior.None:
+                    ShowToast("비활성화 동작 설정 변경: 그대로 남겨 두기");
+                    break;
+                case DeactiveBehavior.Minimize:
+                    ShowToast("비활성화 동작 설정 변경: 최소화 하기");
+                    break;
+                case DeactiveBehavior.MoveToBack:
+                    ShowToast("비활성화 동작 설정 변경: 뒤로 보내기");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnChangePinMethod() {
+            switch (App.Inst.Config.NextPinMethod()) {
+                case PinMethods.None:
+                    ShowToast("창 고정 설정 변경: 현재 상태 유지");
+                    break;
+                case PinMethods.Pin:
+                    ShowToast("창 고정 설정 변경: 창을 고정 시키기");
+                    VirtualDesktop.PinWindow(this);
+                    break;
+                case PinMethods.Unpin:
+                    ShowToast("창 고정 설정 변경: 창 고정을 해제");
+                    VirtualDesktop.UnpinWindow(this);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnChangeKeepFolder() {
+            if (App.Inst.Config.NextKeepFolder())
+                ShowToast("활성화 되면서 이전 폴더가 보여집니다.");
+            else
+                ShowToast("활성화 되면서 지정 폴더가 보여집니다.");
         }
 
         private void OnSetHome() {
@@ -199,6 +252,10 @@ namespace MyShortcuts {
             toast?.Close();
             toast = new ToastWindow(msg) { Left = Left, Top = Top, Owner = this };
             toast.Show();
+        }
+
+        public void OnCloseToast() {
+            toast = null;
         }
 
         private void ExplorerBrowserHolder_SizeChanged(object sender, SizeChangedEventArgs e) {
