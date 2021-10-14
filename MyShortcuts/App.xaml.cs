@@ -11,14 +11,6 @@ namespace MyShortcuts {
 
         public ConfigFile Config { get; private set; }
 
-        public static void ErrorBox(string msg) {
-            _ = MessageBox.Show(msg, Name, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        public static MessageBoxResult MsgBox(string msg, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.Information, MessageBoxResult defaultResult = MessageBoxResult.OK) {
-            return MessageBox.Show(msg, Name, button, image, defaultResult);
-        }
-
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
 

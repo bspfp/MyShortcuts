@@ -4,10 +4,10 @@ using System.Windows.Interop;
 
 namespace MyShortcuts {
     internal class ExplorerBrowser : HwndHost {
-        public string ParsingName => parsingName;
-        public string EditName => editName;
-        public string NormalName => normalName;
-		public bool IsFileSystemFolder => isFileSystemFolder;
+        public string ParsingName { get; private set; } = "";
+        public string EditName { get; private set; } = "";
+        public string NormalName { get; private set; } = "";
+        public bool IsFileSystemFolder { get; private set; } = false;
 
         private FOLDERSETTINGS DefaultFolderSettings = new FOLDERSETTINGS() {
             ViewMode = FOLDERVIEWMODE.FVM_ICON,
@@ -21,10 +21,6 @@ namespace MyShortcuts {
 
         private MyShortcutsInterop.NavigationCompleteCallback completeCallback;
         private MyShortcutsInterop.NavigationFailedCallback failedCallback;
-        private string parsingName = "";
-        private string editName = "";
-        private string normalName = "";
-        private bool isFileSystemFolder = false;
 
         protected override HandleRef BuildWindowCore(HandleRef hwndParent) {
             completeCallback = new MyShortcutsInterop.NavigationCompleteCallback(OnNavigationComplete);
@@ -59,10 +55,10 @@ namespace MyShortcuts {
         }
 
         public void OnNavigationComplete(string parsingName, string editName, string normalName, bool isFileSystemFolder) {
-            this.parsingName = parsingName;
-            this.editName = editName;
-            this.normalName = normalName;
-            this.isFileSystemFolder = isFileSystemFolder;
+            ParsingName = parsingName;
+            EditName = editName;
+            NormalName = normalName;
+            IsFileSystemFolder = isFileSystemFolder;
         }
 
         public void OnNavigationFailed(string parsingName, string editName, string normalName, bool isFileSystemFolder) { }

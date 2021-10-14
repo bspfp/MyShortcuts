@@ -252,20 +252,23 @@ namespace MyShortcuts {
             toastMsg.Text = msg;
             toastStartTick = Environment.TickCount;
             if (toastTimer == null)
-                toastTimer = new Timer(_ => { Dispatcher.BeginInvoke(new Action(OnTickToast)); }, null, 50, 50);
+                toastTimer = new Timer(_ => { _ = Dispatcher.BeginInvoke(new Action(OnTickToast)); }, null, 50, 50);
         }
 
         private void OnTickToast() {
             var param1 = 300.0;
             var param2 = 2000;
 
-            uint elapsed = (uint)(Environment.TickCount - toastStartTick);
-            if (elapsed < param1)
+            var elapsed = (uint)(Environment.TickCount - toastStartTick);
+            if (elapsed < param1) {
                 toastMsg.Opacity = elapsed / param1;
-            else if (elapsed < param2 - param1)
+            }
+            else if (elapsed < param2 - param1) {
                 toastMsg.Opacity = 1.0;
-            else if (elapsed < param2)
+            }
+            else if (elapsed < param2) {
                 toastMsg.Opacity = 1.0 - ((elapsed - (param2 - param1)) / param1);
+            }
             else {
                 toastMsg.Visibility = Visibility.Hidden;
                 toastMsg.Opacity = 0;
@@ -307,11 +310,9 @@ namespace MyShortcuts {
         }
 
         public bool IsDialogMessage(ref MSG msg) {
-            if (aboutDlg != null && PresentationSource.FromVisual(aboutDlg) is HwndSource hwndSource) {
-                return Win32.IsDialogMessageW(hwndSource.Handle, ref msg) != 0;
-            }
-
-            return false;
+            return aboutDlg != null
+                && PresentationSource.FromVisual(aboutDlg) is HwndSource hwndSource
+                && Win32.IsDialogMessageW(hwndSource.Handle, ref msg) != 0;
         }
     }
 }
