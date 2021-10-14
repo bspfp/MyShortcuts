@@ -22,14 +22,19 @@ namespace MyShortcuts {
                 }
                 catch { }
                 try {
-                    var bt = File.ReadAllBytes(lockFilePath);
-                    var pid = BitConverter.ToInt32(bt, 0);
-                    var running = Process.GetProcessById(pid);
-                    var mainWindow = running.MainWindowHandle;
-                    _ = Win32.PostMessage(mainWindow, notifyMessage, 0, 0);
-                    return true;
+                    using (var f = File.Open(lockFilePath, FileMode.Open, FileAccess.Read, FileShare.Write)) {
+                        var buf = new byte[4];
+                        f.Read(buf, 0, 4);
+                        var pid = BitConverter.ToInt32(buf, 0);
+                        var running = Process.GetProcessById(pid);
+                        var mainWindow = running.MainWindowHandle;
+                        _ = Win32.PostMessage(mainWindow, notifyMessage, 0, 0);
+                        return true;
+                    }
                 }
-                catch { }
+                catch (Exception ex) {
+                    Debug.WriteLine(ex.Message);
+                }
                 Thread.Sleep(1000);
             }
 

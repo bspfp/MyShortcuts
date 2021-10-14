@@ -253,8 +253,8 @@ namespace MyShortcuts {
             toastMsg.Opacity = 0;
             toastMsg.Text = msg;
             toastStartTick = Environment.TickCount;
-            toastTimer?.Dispose();
-            toastTimer = new Timer(_ => { Dispatcher.BeginInvoke(new Action(OnTickToast)); }, null, 50, 50);
+            if (toastTimer == null)
+                toastTimer = new Timer(_ => { Dispatcher.BeginInvoke(new Action(OnTickToast)); }, null, 50, 50);
         }
 
         private void OnTickToast() {
