@@ -19,7 +19,7 @@
             <RowDefinition Height="64"/>
         </Grid.RowDefinitions>
 
-        <Border x:Name="explorerBrowserHolder" Grid.ColumnSpan="5" SizeChanged="ExplorerBrowserHolder_SizeChanged"/>
+        <Border x:Name="explorerBrowserHolder" Grid.ColumnSpan="5"/>
 
         <Button x:Name="backButton" HorizontalAlignment="Right" Grid.Row="1" Background="{x:Null}" BorderBrush="{x:Null}" Click="BackButton_Click" Focusable="False">
             <ContentControl Margin="8">

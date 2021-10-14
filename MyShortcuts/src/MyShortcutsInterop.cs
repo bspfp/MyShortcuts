@@ -25,9 +25,6 @@ namespace MyShortcuts {
         internal static extern void DestroyExplorerBrowser(IntPtr hwnd);
 
         [DllImport("MyShortcutsInterop.dll", CharSet = CharSet.Unicode)]
-        internal static extern void FitToParent(IntPtr hwnd);
-
-        [DllImport("MyShortcutsInterop.dll", CharSet = CharSet.Unicode)]
         internal static extern void SetFocusToShellView(IntPtr hwnd);
 
         [DllImport("MyShortcutsInterop.dll", CharSet = CharSet.Unicode)]

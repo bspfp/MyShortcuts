@@ -251,36 +251,35 @@ namespace MyShortcuts {
             toastMsg.Opacity = 0;
             toastMsg.Text = msg;
             toastStartTick = Environment.TickCount;
-            if (toastTimer == null)
-                toastTimer = new Timer(_ => { _ = Dispatcher.BeginInvoke(new Action(OnTickToast)); }, null, 50, 50);
-        }
+            toastTimer?.Dispose();
+            toastTimer = new Timer(state => {
+                _ = Dispatcher.BeginInvoke(new Action(()=> {
+                    var id = (int)state;
+                    if (id == toastStartTick) {
+                        var param1 = 300.0;
+                        var param2 = 2000;
 
-        private void OnTickToast() {
-            var param1 = 300.0;
-            var param2 = 2000;
-
-            var elapsed = (uint)(Environment.TickCount - toastStartTick);
-            if (elapsed < param1) {
-                toastMsg.Opacity = elapsed / param1;
-            }
-            else if (elapsed < param2 - param1) {
-                toastMsg.Opacity = 1.0;
-            }
-            else if (elapsed < param2) {
-                toastMsg.Opacity = 1.0 - ((elapsed - (param2 - param1)) / param1);
-            }
-            else {
-                toastMsg.Visibility = Visibility.Hidden;
-                toastMsg.Opacity = 0;
-                toastMsg.Text = "";
-                toastTimer?.Dispose();
-                toastTimer = null;
-            }
-        }
-
-        private void ExplorerBrowserHolder_SizeChanged(object sender, SizeChangedEventArgs e) {
-            if (explorerBrowser != null && explorerBrowser.Handle != IntPtr.Zero)
-                MyShortcutsInterop.FitToParent(explorerBrowser.Handle);
+                        var elapsed = (uint)(Environment.TickCount - toastStartTick);
+                        if (elapsed < param1) {
+                            toastMsg.Opacity = elapsed / param1;
+                        }
+                        else if (elapsed < param2 - param1) {
+                            toastMsg.Opacity = 1.0;
+                        }
+                        else if (elapsed < param2) {
+                            toastMsg.Opacity = 1.0 - ((elapsed - (param2 - param1)) / param1);
+                        }
+                        else {
+                            toastMsg.Visibility = Visibility.Hidden;
+                            toastMsg.Opacity = 0;
+                            toastMsg.Text = "";
+                            toastStartTick = 0;
+                            toastTimer?.Dispose();
+                            toastTimer = null;
+                        }
+                    }
+                }));
+            }, toastStartTick, 50, 50);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e) {

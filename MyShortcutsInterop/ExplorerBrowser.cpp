@@ -3,11 +3,11 @@
 
 ExplorerBrowser::~ExplorerBrowser() {
 	if (explorerBrowser != nullptr) {
-		explorerBrowser->Destroy();
 		if (cookie != 0) {
 			explorerBrowser->Unadvise(cookie);
 			cookie = 0;
 		}
+		explorerBrowser->Destroy();
 		explorerBrowser->Release();
 		explorerBrowser = nullptr;
 	}
@@ -31,8 +31,7 @@ HWND ExplorerBrowser::Create(HWND hwndParent, FOLDERSETTINGS& folderSettings, EX
 							 const wchar_t* homeFolder, NavigationCompleteCallback completeCallback, NavigationFailedCallback failedCallback) {
 	this->homeFolder = homeFolder;
 
-	RECT rect = {};
-	GetClientRect(hwndParent, &rect);
+	RECT rect = { 0,0,0,0 };
 	if (SUCCEEDED(CoCreateInstance(CLSID_ExplorerBrowser, nullptr, CLSCTX_INPROC, IID_PPV_ARGS(&explorerBrowser)))) {
 		IUnknown_SetSite(explorerBrowser, (IServiceProvider*)this);
 		if (SUCCEEDED(explorerBrowser->Advise((IExplorerBrowserEvents*)this, &cookie))) {

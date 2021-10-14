@@ -27,8 +27,8 @@ namespace MyShortcuts {
                 new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_HOME, cmd = CustomCommands.Home },
                 new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_INSERT, cmd = CustomCommands.SetHome },
                 new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_1, cmd = CustomCommands.ChangeDeactiveBehavior },
-                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_2, cmd = CustomCommands.ChangePinMethod },
-                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_3, cmd = CustomCommands.ChangeKeepFolder },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_2, cmd = CustomCommands.ChangeKeepFolder },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_3, cmd = CustomCommands.ChangePinMethod },
                 new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY, key = AccelVirtualKeys.VK_F1, cmd = CustomCommands.About },
             };
             accelerators = Win32.CreateAcceleratorTableW(accelTable, accelTable.Length);

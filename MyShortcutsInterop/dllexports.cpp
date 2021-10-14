@@ -29,17 +29,6 @@ extern "C" {
 
 	/*
 	[DllImport("MyShortcutsInterop.dll", CharSet = CharSet.Unicode)]
-	internal static extern void FitToParent(IntPtr hwnd);
-	*/
-	__declspec(dllexport) void __cdecl FitToParent(HWND hwnd) {
-		HWND hwndParent = GetParent(hwnd);
-		RECT rect = {};
-		GetClientRect(hwndParent, &rect);
-		MoveWindow(hwnd, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, true);
-	}
-
-	/*
-	[DllImport("MyShortcutsInterop.dll", CharSet = CharSet.Unicode)]
 	internal static extern void BringToTop(IntPtr hwndMain);
 	*/
 	__declspec(dllexport)  void __cdecl BringToTop(HWND hwndMain) {
@@ -56,20 +45,19 @@ extern "C" {
 		wp.length = sizeof(wp);
 		GetWindowPlacement(hwndMain, &wp);
 
-		auto tidMy = GetWindowThreadProcessId(hwndMain, nullptr);
+		auto tidTarget = GetWindowThreadProcessId(hwndMain, nullptr);
 		auto tidForeground = GetWindowThreadProcessId(hwndForeground, nullptr);
-		if (tidMy != tidForeground) {
-			if (AttachThreadInput(GetCurrentThreadId(), tidForeground, TRUE)) {
-				if (wp.showCmd == SW_SHOWMINIMIZED)
-					ShowWindow(hwndMain, SW_RESTORE);
-				else if (wp.showCmd == SW_SHOWMAXIMIZED)
-					ShowWindow(hwndMain, SW_SHOWMAXIMIZED);
-				else
-					ShowWindow(hwndMain, SW_SHOWNORMAL);
-				SetForegroundWindow(hwndMain);
-				BringWindowToTop(hwndMain);
+		if (tidTarget == tidForeground || AttachThreadInput(GetCurrentThreadId(), tidForeground, TRUE)) {
+			if (wp.showCmd == SW_SHOWMINIMIZED)
+				ShowWindow(hwndMain, SW_RESTORE);
+			else if (wp.showCmd == SW_SHOWMAXIMIZED)
+				ShowWindow(hwndMain, SW_SHOWMAXIMIZED);
+			else
+				ShowWindow(hwndMain, SW_SHOWNORMAL);
+			SetForegroundWindow(hwndMain);
+			BringWindowToTop(hwndMain);
+			if (tidTarget != tidForeground)
 				AttachThreadInput(GetCurrentThreadId(), tidForeground, FALSE);
-			}
 		}
 	}
 
