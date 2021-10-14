@@ -130,23 +130,21 @@ namespace MyShortcuts {
                 MyShortcutsInterop.BringToBottom(hwndSource.Handle);
         }
 
-        private static IntPtr WndProcHook(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam, ref bool handled) {
-            var mainWindow = App.Inst.MainWindow as MainWindow;
-
+        private IntPtr WndProcHook(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam, ref bool handled) {
             switch ((uint)msg) {
                 case (uint)WindowMessages.Activate: {
-                        if (mainWindow != null)
-                            mainWindow.BringToTop();
+                        BringToTop();
                         handled = true;
                     }
                     break;
 
                 case (int)WindowMessages.WM_APPCOMMAND:
-                    handled = mainWindow?.explorerBrowser.OnAppCommand(hwnd, wparam, Win32.GET_APPCOMMAND_LPARAM(lparam)) ?? false;
+                    if (explorerBrowser != null)
+                        handled = explorerBrowser?.OnAppCommand(hwnd, wparam, Win32.GET_APPCOMMAND_LPARAM(lparam)) ?? false;
                     break;
 
                 case (int)WindowMessages.WM_COMMAND:
-                    handled = mainWindow?.OnWM_Command((ushort)Win32.LOWORD(wparam)) ?? false;
+                    handled = OnWM_Command((ushort)Win32.LOWORD(wparam));
                     break;
 
                 default:
