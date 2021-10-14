@@ -50,5 +50,7 @@
                 <Image Source="icons/unknown.ico"/>
             </ContentControl>
         </Button>
+        
+        <TextBlock x:Name="toastMsg" Grid.Row="1" Grid.ColumnSpan="5" Text="토스트 메시지" HorizontalAlignment="Center" VerticalAlignment="Center" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Foreground="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}" Padding="4" Panel.ZIndex="1" Opacity="0" Visibility="Hidden" />
     </Grid>
 </Window>

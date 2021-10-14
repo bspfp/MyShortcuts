@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -8,7 +9,8 @@ namespace MyShortcuts {
 
         private ExplorerBrowser explorerBrowser;
         private About aboutDlg = null;
-        private ToastWindow toast = null;
+        private Timer toastTimer = null;
+        private int toastStartTick = 0;
 
         public MainWindow() {
             InitializeComponent();
@@ -93,8 +95,6 @@ namespace MyShortcuts {
             App.Inst.Config.Maximized = WindowState == WindowState.Maximized;
             aboutDlg?.Close();
             aboutDlg = null;
-            toast?.Close();
-            toast = null;
         }
 
         private void Window_Activated(object sender, EventArgs e) {
@@ -103,7 +103,7 @@ namespace MyShortcuts {
         }
 
         private void Window_Deactivated(object sender, EventArgs e) {
-            if (aboutDlg == null && toast == null) {
+            if (aboutDlg == null) {
                 switch (App.Inst.Config.DeactiveBehavior) {
                     case DeactiveBehavior.Minimize:
                         WindowState = WindowState.Minimized;
@@ -223,11 +223,11 @@ namespace MyShortcuts {
                     break;
                 case PinMethods.Pin:
                     ShowToast("창 고정 설정 변경: 창을 고정 시키기");
-                    VirtualDesktop.PinWindow(this);
+                    _ = VirtualDesktop.PinWindow(this);
                     break;
                 case PinMethods.Unpin:
                     ShowToast("창 고정 설정 변경: 창 고정을 해제");
-                    VirtualDesktop.UnpinWindow(this);
+                    _ = VirtualDesktop.UnpinWindow(this);
                     break;
                 default:
                     break;
@@ -249,13 +249,32 @@ namespace MyShortcuts {
         }
 
         private void ShowToast(string msg) {
-            toast?.Close();
-            toast = new ToastWindow(msg) { Left = Left, Top = Top, Owner = this };
-            toast.Show();
+            toastMsg.Visibility = Visibility.Visible;
+            toastMsg.Opacity = 0;
+            toastMsg.Text = msg;
+            toastStartTick = Environment.TickCount;
+            toastTimer?.Dispose();
+            toastTimer = new Timer(_ => { Dispatcher.BeginInvoke(new Action(OnTickToast)); }, null, 50, 50);
         }
 
-        public void OnCloseToast() {
-            toast = null;
+        private void OnTickToast() {
+            var param1 = 300.0;
+            var param2 = 2000;
+
+            uint elapsed = (uint)(Environment.TickCount - toastStartTick);
+            if (elapsed < param1)
+                toastMsg.Opacity = elapsed / param1;
+            else if (elapsed < param2 - param1)
+                toastMsg.Opacity = 1.0;
+            else if (elapsed < param2)
+                toastMsg.Opacity = 1.0 - ((elapsed - (param2 - param1)) / param1);
+            else {
+                toastMsg.Visibility = Visibility.Hidden;
+                toastMsg.Opacity = 0;
+                toastMsg.Text = "";
+                toastTimer?.Dispose();
+                toastTimer = null;
+            }
         }
 
         private void ExplorerBrowserHolder_SizeChanged(object sender, SizeChangedEventArgs e) {
