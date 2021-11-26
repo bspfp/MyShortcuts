@@ -71,7 +71,7 @@ namespace MyShortcuts {
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e) {
-            if (WindowState == WindowState.Normal) {
+            if (!App.Inst.Config.FixedPosition && WindowState == WindowState.Normal) {
                 App.Inst.Config.Left = Left;
                 App.Inst.Config.Top = Top;
                 App.Inst.Config.Width = Width;
@@ -81,15 +81,27 @@ namespace MyShortcuts {
         }
 
         private void Window_LocationChanged(object sender, EventArgs e) {
-            if (PresentationSource.FromVisual(this) is PresentationSource presentationSource) {
-                var leftTop = presentationSource.CompositionTarget.TransformToDevice.Transform(new Point(Left, Top));
-                if (WindowState == WindowState.Normal && ((int)leftTop.X) != -32000 && ((int)leftTop.Y) != -32000) {
-                    App.Inst.Config.Left = Left;
-                    App.Inst.Config.Top = Top;
-                    App.Inst.Config.Width = Width;
-                    App.Inst.Config.Height = Height;
-                    App.Inst.Config.Maximized = false;
+            if (!App.Inst.Config.FixedPosition) {
+                if (PresentationSource.FromVisual(this) is PresentationSource presentationSource) {
+                    var leftTop = presentationSource.CompositionTarget.TransformToDevice.Transform(new Point(Left, Top));
+                    if (WindowState == WindowState.Normal && ((int)leftTop.X) != -32000 && ((int)leftTop.Y) != -32000) {
+                        App.Inst.Config.Left = Left;
+                        App.Inst.Config.Top = Top;
+                        App.Inst.Config.Width = Width;
+                        App.Inst.Config.Height = Height;
+                        App.Inst.Config.Maximized = false;
+                    }
                 }
+            }
+        }
+
+        protected override void OnStateChanged(EventArgs e) {
+            base.OnStateChanged(e);
+            if (WindowState == WindowState.Normal && App.Inst.Config.FixedPosition) {
+                Left = App.Inst.Config.Left;
+                Top = App.Inst.Config.Top;
+                Width = App.Inst.Config.Width;
+                Height = App.Inst.Config.Height;
             }
         }
 
@@ -194,6 +206,10 @@ namespace MyShortcuts {
                     OnChangeKeepFolder();
                     break;
 
+                case (ushort)CustomCommands.ChangeFixedPosition:
+                    OnChangeFixedPosition();
+                    break;
+
                 default:
                     break;
             }
@@ -241,6 +257,13 @@ namespace MyShortcuts {
                 ShowToast("활성화 되면서 지정 폴더가 보여집니다.");
         }
 
+        private void OnChangeFixedPosition() {
+            if (App.Inst.Config.NextFixedPosition())
+                ShowToast("창의 위치와 크기를 고정합니다.");
+            else
+                ShowToast("창의 위치와 크기의 변경을 기록합니다.");
+        }
+
         private void OnSetHome() {
             if (explorerBrowser != null && !string.IsNullOrWhiteSpace(explorerBrowser.ParsingName)) {
                 App.Inst.Config.Folder = explorerBrowser.ParsingName;
@@ -255,7 +278,7 @@ namespace MyShortcuts {
             toastStartTick = Environment.TickCount;
             toastTimer?.Dispose();
             toastTimer = new Timer(state => {
-                _ = Dispatcher.BeginInvoke(new Action(()=> {
+                _ = Dispatcher.BeginInvoke(new Action(() => {
                     var id = (int)state;
                     if (id == toastStartTick) {
                         var param1 = 300.0;

@@ -26,6 +26,7 @@ namespace MyShortcuts {
         public PinMethods PinMethods = PinMethods.None;
         public bool KeepFolder = false;
         public bool UseSingleClick = false;
+        public bool FixedPosition = false;
 
         public bool Valid => Width > 0 && Height > 0 && Folder.Length > 0;
 
@@ -40,6 +41,7 @@ namespace MyShortcuts {
             "# PinMethods: <enum>, 창 고정 방법, None, Pin, Unpin",
             "# KeepFolder: <boolean>, 활성화 될 때 지정된 폴더로 다시 보여 주려면 true",
             "# UseSingleClick: <boolean>, 더블클릭 대신 클릭으로 아이템을 실행하려면 true",
+            "# FixedPosition: <boolean>, 창의 위치와 크기를 변경하지 않으려면 true",
         };
 
         private const string ConfigFileName = "MyShortcuts.config";
@@ -74,6 +76,7 @@ namespace MyShortcuts {
             data.Get("PinMethods", ref ret.PinMethods);
             data.Get("KeepFolder", ref ret.KeepFolder);
             data.Get("UseSingleClick", ref ret.UseSingleClick);
+            data.Get("FixedPosition", ref ret.FixedPosition);
 
             for (ret.currentDeactiveBehavior = 0; ret.currentDeactiveBehavior < ret.deactiveBehaviors.Length; ret.currentDeactiveBehavior++) {
                 if (ret.deactiveBehaviors[ret.currentDeactiveBehavior] == ret.DeactiveBehavior)
@@ -83,6 +86,9 @@ namespace MyShortcuts {
                 if (ret.pinMethods[ret.currentPinMethod] == ret.PinMethods)
                     break;
             }
+
+            if (!ret.Valid)
+                ret.FixedPosition = false;
 
             return ret;
         }
@@ -100,6 +106,7 @@ namespace MyShortcuts {
             data.Set("PinMethods", PinMethods);
             data.Set("KeepFolder", KeepFolder);
             data.Set("UseSingleClick", UseSingleClick);
+            data.Set("FixedPosition", FixedPosition);
 
             data.Save(configFilePath, Description);
         }
@@ -119,6 +126,11 @@ namespace MyShortcuts {
         public bool NextKeepFolder() {
             KeepFolder = !KeepFolder;
             return KeepFolder;
+        }
+
+        public bool NextFixedPosition() {
+            FixedPosition = !FixedPosition;
+            return FixedPosition;
         }
     }
 }
