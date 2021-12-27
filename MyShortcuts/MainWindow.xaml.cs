@@ -210,6 +210,10 @@ namespace MyShortcuts {
                     OnChangeFixedPosition();
                     break;
 
+                case (ushort)CustomCommands.CloseApp:
+                    Close();
+                    break;
+
                 default:
                     break;
             }

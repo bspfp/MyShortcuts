@@ -37,6 +37,7 @@ namespace MyShortcuts {
         VK_2 = 0x32,
         VK_3 = 0x33,
         VK_4 = 0x34,
+        VK_W = 0x57,
         VK_F1 = 0x70,
     }
 
@@ -51,6 +52,7 @@ namespace MyShortcuts {
         ChangePinMethod,
         ChangeKeepFolder,
         ChangeFixedPosition,
+        CloseApp,
     }
 
     [StructLayout(LayoutKind.Sequential)]
