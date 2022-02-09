@@ -90,6 +90,8 @@ namespace MyShortcuts {
             if (!ret.Valid)
                 ret.FixedPosition = false;
 
+            Directory.CreateDirectory(ret.Folder);
+
             return ret;
         }
         public void Save() {
