@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyShortcuts"
         mc:Ignorable="d"
-        Title="MyShortcuts" Height="450" Width="800" Icon="icons/startup.ico" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" LocationChanged="Window_LocationChanged" Activated="Window_Activated" Deactivated="Window_Deactivated" Closing="Window_Closing">
+        Title="MyShortcuts" Height="450" Width="800" Icon="icons/startup.ico" Loaded="Window_Loaded" Activated="Window_Activated" Deactivated="Window_Deactivated" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="64"/>

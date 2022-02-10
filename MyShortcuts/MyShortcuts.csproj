@@ -71,7 +71,6 @@
     <Compile Include="src\ExplorerBrowser.cs" />
     <Compile Include="src\MyShortcutsInterop.cs" />
     <Compile Include="src\COM.cs" />
-    <Compile Include="src\VirtualDesktop.cs" />
     <Compile Include="src\Win32.cs" />
     <Compile Include="src\Utils.cs" />
     <Page Include="About.xaml">

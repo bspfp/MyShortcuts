@@ -49,9 +49,8 @@ namespace MyShortcuts {
         About,
         SetHome,
         ChangeDeactiveBehavior,
-        ChangePinMethod,
         ChangeKeepFolder,
-        ChangeFixedPosition,
+        ChangeWindowPosSize,
         CloseApp,
     }
 

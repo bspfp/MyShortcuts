@@ -9,12 +9,6 @@ namespace MyShortcuts {
         MoveToBack,
     }
 
-    public enum PinMethods {
-        None,
-        Pin,
-        Unpin,
-    }
-
     public class ConfigFile {
         public string Folder = "";
         public double Left = 0;
@@ -23,10 +17,8 @@ namespace MyShortcuts {
         public double Height = 0;
         public bool Maximized = false;
         public DeactiveBehavior DeactiveBehavior = DeactiveBehavior.MoveToBack;
-        public PinMethods PinMethods = PinMethods.None;
         public bool KeepFolder = false;
         public bool UseSingleClick = false;
-        public bool FixedPosition = false;
 
         public bool Valid => Width > 0 && Height > 0 && Folder.Length > 0;
 
@@ -38,10 +30,8 @@ namespace MyShortcuts {
             "# Left, Top, Width, Height: <double>, 창의 위치, 단위는 1/96 inch 논리 픽셀",
             "# Maximized: <boolean>, 최대화",
             "# DeactiveBehavior: <enum>, 비활성화 동작 설정, None, Minimize, MoveToBack",
-            "# PinMethods: <enum>, 창 고정 방법, None, Pin, Unpin",
             "# KeepFolder: <boolean>, 활성화 될 때 지정된 폴더로 다시 보여 주려면 true",
             "# UseSingleClick: <boolean>, 더블클릭 대신 클릭으로 아이템을 실행하려면 true",
-            "# FixedPosition: <boolean>, 창의 위치와 크기를 변경하지 않으려면 true",
         };
 
         private const string ConfigFileName = "MyShortcuts.config";
@@ -51,8 +41,6 @@ namespace MyShortcuts {
 
         private readonly DeactiveBehavior[] deactiveBehaviors = new DeactiveBehavior[] { DeactiveBehavior.Minimize, DeactiveBehavior.MoveToBack, DeactiveBehavior.None };
         private int currentDeactiveBehavior = 0;
-        private readonly PinMethods[] pinMethods = new PinMethods[] { PinMethods.Pin, PinMethods.None, PinMethods.Unpin, PinMethods.None };
-        private int currentPinMethod = 0;
 
         public static ConfigFile Load() {
             var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -72,43 +60,33 @@ namespace MyShortcuts {
             data.Get("Height", ref ret.Height);
             data.Get("Maximized", ref ret.Maximized);
             data.Get("DeactiveBehavior", ref ret.DeactiveBehavior);
-            data.Get("DeactiveBehavior", ref ret.DeactiveBehavior);
-            data.Get("PinMethods", ref ret.PinMethods);
             data.Get("KeepFolder", ref ret.KeepFolder);
             data.Get("UseSingleClick", ref ret.UseSingleClick);
-            data.Get("FixedPosition", ref ret.FixedPosition);
 
             for (ret.currentDeactiveBehavior = 0; ret.currentDeactiveBehavior < ret.deactiveBehaviors.Length; ret.currentDeactiveBehavior++) {
                 if (ret.deactiveBehaviors[ret.currentDeactiveBehavior] == ret.DeactiveBehavior)
                     break;
             }
-            for (ret.currentPinMethod = 0; ret.currentPinMethod < ret.pinMethods.Length; ret.currentPinMethod++) {
-                if (ret.pinMethods[ret.currentPinMethod] == ret.PinMethods)
-                    break;
-            }
-
-            if (!ret.Valid)
-                ret.FixedPosition = false;
 
             Directory.CreateDirectory(ret.Folder);
 
             return ret;
         }
-        public void Save() {
+        private void Save(bool withWindowPosSize) {
             var data = new SimpleConfigFile(configFilePath);
 
             data.Set("Folder", Folder);
-            data.Set("Left", Left);
-            data.Set("Top", Top);
-            data.Set("Width", Width);
-            data.Set("Height", Height);
-            data.Set("Maximized", Maximized);
+            if (withWindowPosSize) {
+                data.Set("Left", Left);
+                data.Set("Top", Top);
+                data.Set("Width", Width);
+                data.Set("Height", Height);
+                data.Set("Maximized", Maximized);
+            }
+
             data.Set("DeactiveBehavior", DeactiveBehavior);
-            data.Set("DeactiveBehavior", DeactiveBehavior);
-            data.Set("PinMethods", PinMethods);
             data.Set("KeepFolder", KeepFolder);
             data.Set("UseSingleClick", UseSingleClick);
-            data.Set("FixedPosition", FixedPosition);
 
             data.Save(configFilePath, Description);
         }
@@ -116,23 +94,19 @@ namespace MyShortcuts {
         public DeactiveBehavior NextDeactiveBehavior() {
             currentDeactiveBehavior = (currentDeactiveBehavior + 1) % deactiveBehaviors.Length;
             DeactiveBehavior = deactiveBehaviors[currentDeactiveBehavior];
+            Save(false);
             return DeactiveBehavior;
-        }
-
-        public PinMethods NextPinMethod() {
-            currentPinMethod = (currentPinMethod + 1) % pinMethods.Length;
-            PinMethods = pinMethods[currentPinMethod];
-            return PinMethods;
         }
 
         public bool NextKeepFolder() {
             KeepFolder = !KeepFolder;
+            Save(false);
             return KeepFolder;
         }
 
-        public bool NextFixedPosition() {
-            FixedPosition = !FixedPosition;
-            return FixedPosition;
+        public void ChangeWindowPosSize() {
+            // TODO
+            Save(true);
         }
     }
 }

@@ -28,8 +28,7 @@ namespace MyShortcuts {
                 new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_INSERT, cmd = CustomCommands.SetHome },
                 new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_1, cmd = CustomCommands.ChangeDeactiveBehavior },
                 new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_2, cmd = CustomCommands.ChangeKeepFolder },
-                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_3, cmd = CustomCommands.ChangePinMethod },
-                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_4, cmd = CustomCommands.ChangeFixedPosition },
+                new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FALT, key = AccelVirtualKeys.VK_3, cmd = CustomCommands.ChangeWindowPosSize },
                 new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY | AccelFVirt.FCONTROL, key = AccelVirtualKeys.VK_W, cmd = CustomCommands.CloseApp },
                 new ACCEL(){ fVirt = AccelFVirt.FVIRTKEY, key = AccelVirtualKeys.VK_F1, cmd = CustomCommands.About },
             };
@@ -40,8 +39,6 @@ namespace MyShortcuts {
 
         protected override void OnExit(ExitEventArgs e) {
             ComponentDispatcher.ThreadFilterMessage -= MsgFilter;
-
-            Config.Save();
 
             duplicatedRunChecker?.Dispose();
             duplicatedRunChecker = null;

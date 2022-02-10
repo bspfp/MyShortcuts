@@ -56,48 +56,11 @@ namespace MyShortcuts {
             MinHeight = Math.Max(SystemParameters.VirtualScreenHeight / 8, upButton.ActualHeight * 4);
 
             explorerBrowser.SetFocusToShellView();
-
-            switch (App.Inst.Config.PinMethods) {
-                case PinMethods.Pin:
-                    _ = VirtualDesktop.PinWindow(this);
-                    break;
-                case PinMethods.Unpin:
-                    _ = VirtualDesktop.UnpinWindow(this);
-                    break;
-                case PinMethods.None:
-                default:
-                    break;
-            }
-        }
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e) {
-            if (!App.Inst.Config.FixedPosition && WindowState == WindowState.Normal) {
-                App.Inst.Config.Left = Left;
-                App.Inst.Config.Top = Top;
-                App.Inst.Config.Width = Width;
-                App.Inst.Config.Height = Height;
-                App.Inst.Config.Maximized = false;
-            }
-        }
-
-        private void Window_LocationChanged(object sender, EventArgs e) {
-            if (!App.Inst.Config.FixedPosition) {
-                if (PresentationSource.FromVisual(this) is PresentationSource presentationSource) {
-                    var leftTop = presentationSource.CompositionTarget.TransformToDevice.Transform(new Point(Left, Top));
-                    if (WindowState == WindowState.Normal && ((int)leftTop.X) != -32000 && ((int)leftTop.Y) != -32000) {
-                        App.Inst.Config.Left = Left;
-                        App.Inst.Config.Top = Top;
-                        App.Inst.Config.Width = Width;
-                        App.Inst.Config.Height = Height;
-                        App.Inst.Config.Maximized = false;
-                    }
-                }
-            }
         }
 
         protected override void OnStateChanged(EventArgs e) {
             base.OnStateChanged(e);
-            if (WindowState == WindowState.Normal && App.Inst.Config.FixedPosition) {
+            if (WindowState == WindowState.Normal) {
                 Left = App.Inst.Config.Left;
                 Top = App.Inst.Config.Top;
                 Width = App.Inst.Config.Width;
@@ -198,16 +161,12 @@ namespace MyShortcuts {
                     OnChangeDeactiveBehavior();
                     break;
 
-                case (ushort)CustomCommands.ChangePinMethod:
-                    OnChangePinMethod();
-                    break;
-
                 case (ushort)CustomCommands.ChangeKeepFolder:
                     OnChangeKeepFolder();
                     break;
 
-                case (ushort)CustomCommands.ChangeFixedPosition:
-                    OnChangeFixedPosition();
+                case (ushort)CustomCommands.ChangeWindowPosSize:
+                    OnChangeWindowPosSize();
                     break;
 
                 case (ushort)CustomCommands.CloseApp:
@@ -236,24 +195,6 @@ namespace MyShortcuts {
             }
         }
 
-        private void OnChangePinMethod() {
-            switch (App.Inst.Config.NextPinMethod()) {
-                case PinMethods.None:
-                    ShowToast("창 고정 설정 변경: 현재 상태 유지");
-                    break;
-                case PinMethods.Pin:
-                    ShowToast("창 고정 설정 변경: 창을 고정 시키기");
-                    _ = VirtualDesktop.PinWindow(this);
-                    break;
-                case PinMethods.Unpin:
-                    ShowToast("창 고정 설정 변경: 창 고정을 해제");
-                    _ = VirtualDesktop.UnpinWindow(this);
-                    break;
-                default:
-                    break;
-            }
-        }
-
         private void OnChangeKeepFolder() {
             if (App.Inst.Config.NextKeepFolder())
                 ShowToast("활성화 되면서 이전 폴더가 보여집니다.");
@@ -261,11 +202,15 @@ namespace MyShortcuts {
                 ShowToast("활성화 되면서 지정 폴더가 보여집니다.");
         }
 
-        private void OnChangeFixedPosition() {
-            if (App.Inst.Config.NextFixedPosition())
-                ShowToast("창의 위치와 크기를 고정합니다.");
-            else
-                ShowToast("창의 위치와 크기의 변경을 기록합니다.");
+        private void OnChangeWindowPosSize() {
+            App.Inst.Config.Left = Left;
+            App.Inst.Config.Top = Top;
+            App.Inst.Config.Width = Width;
+            App.Inst.Config.Height = Height;
+            App.Inst.Config.Maximized = WindowState == WindowState.Maximized;
+
+            App.Inst.Config.ChangeWindowPosSize();
+            ShowToast("현재 위치/크기를 저장하였습니다.");
         }
 
         private void OnSetHome() {
